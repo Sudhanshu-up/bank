@@ -138,9 +138,9 @@ const createTransaction = asyncHandler(async(req, res)=>{
             type: "DEBIT"
         } ], { session })
 
-        await (() => {
-            return new Promise((resolve) => setTimeout(resolve, 15 * 1000));
-        })()
+        // await (() => {
+        //     return new Promise((resolve) => setTimeout(resolve, 15 * 1000));
+        // })()
 
         const creditLedgerEntry = await LedgerModel.create([ {
             account: toAccount,

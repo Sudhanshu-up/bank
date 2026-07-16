@@ -178,7 +178,7 @@ const createInitialFundsTransaction = asyncHandler(async(req,res)=>{
     };
     
     const fromUserAccount = await AccountModel.findOne({
-        $0r:[{systemUser:true, user:req.user._id}]
+        $0r:[{user:req.user._id}]
     })
 
     if(!fromUserAccount){
@@ -188,27 +188,27 @@ const createInitialFundsTransaction = asyncHandler(async(req,res)=>{
     const session = await mongoose.startSession()
     session.startTransaction();
 
-    const transaction = await TransactionModel.create({
+    const transaction = new TransactionModel({
         fromAccount:fromUserAccount._id,
         toAccount,
         amount,
         idempotencyKey,
         status:"PENDING"
-    },{session})
+    })
 
-    const debitLedgerEntry = await LedgerModel.create({
+    const debitLedgerEntry = await LedgerModel.create([{
         account:fromUserAccount._id,
         amount:amount,
         transaction: transaction._id,
         type:"DEBIT"
-    },{session})
+    }],{session})
 
-    const creditLedgerEntry = await LedgerModel.create({
+    const creditLedgerEntry = await LedgerModel.create([{
         account:toAccount,
         amount:amount,
         transaction: transaction._id,
         type:"CREDIT"
-    },{session})
+    }],{session})
 
 
     transaction.status = "COMPLETED"

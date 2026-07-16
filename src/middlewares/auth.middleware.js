@@ -41,6 +41,7 @@ const authSystemMiddleware=asyncHandler(async(req, res, next)=>{
      try {
         const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY)
         const user = await UserModel.findById(decoded.userId).select("+systemUser")
+
         if(!user.systemUser){
             return res.status(403).json(
                 new ApiResponse(403,"Forbidden access , not a sysytem user")

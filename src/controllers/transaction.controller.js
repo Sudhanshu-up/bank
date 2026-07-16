@@ -116,7 +116,7 @@ const createTransaction = asyncHandler(async(req, res)=>{
     const session = await mongoose.startSession()
     session.startTransaction()
 
-    const transaction = await TransactionModel.create({
+    const transaction = new TransactionModel({
         fromAccount,
         toAccount,
         amount,
@@ -125,19 +125,19 @@ const createTransaction = asyncHandler(async(req, res)=>{
     },{session})
 
 
-    const debitLedgerEntry = await LedgerModel.create({
+    const debitLedgerEntry = await LedgerModel.create([{
         account:fromAccount,
         amount:amount,
         transaction: transaction._id,
         type:"DEBIT"
-    },{session})
+    }],{session})
 
-    const creditLedgerEntry = await LedgerModel.create({
+    const creditLedgerEntry = await LedgerModel.create([{
         account:toAccount,
         amount:amount,
         transaction: transaction._id,
         type:"CREDIT"
-    },{session})
+    }],{session})
 
     transaction.status = "COMPLETED"
     await transaction.save({session})

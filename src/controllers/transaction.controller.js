@@ -164,7 +164,7 @@ const createTransaction = asyncHandler(async(req, res)=>{
 
 const createInitialFundsTransaction = asyncHandler(async(req,res)=>{
     const {toAccount, amount, idempotencyKey}=req.body
-    if(!toAccountAccount || !amount || !idempotencyKey){
+    if(!toAccount || !amount || !idempotencyKey){
         throw new ApiError(400,
             "Toaccount, Amount and IdempotencyKey is Required !"
         )
@@ -178,7 +178,7 @@ const createInitialFundsTransaction = asyncHandler(async(req,res)=>{
     };
     
     const fromUserAccount = await AccountModel.findOne({
-        $0r:[{user:req.user._id}]
+        $or:[{user:req.user._id}]
     })
 
     if(!fromUserAccount){

@@ -15,7 +15,7 @@ const ledgerSchema = new mongoose.Schema({
         immutable:true,
     
     },
-    trnasaction:{
+    transaction:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"TransactionModel",
         required:[true,"Ledger must be associated with a Transaction"],

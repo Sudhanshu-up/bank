@@ -27,7 +27,7 @@ const userAccountSchema = new mongoose.Schema({
 
 userAccountSchema.index({user:1, status:1}); //compound index
 
-userAccountSchema.method.getBalance = asyncHandler(async function(){
+userAccountSchema.methods.getBalance = asyncHandler(async function(){
 
     const balanceData = await LedgerModel.aggregate([
         {$match: {account : this._id}},

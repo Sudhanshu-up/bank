@@ -3,6 +3,7 @@ import jwt, { decode } from "jsonwebtoken"
 import asyncHandler from "../utils/async_handler.js";
 import ApiError from "../utils/api_error.js";
 import ApiResponse from "../utils/api_response.js";
+import { TokenBlackListModel } from "../models/blacklist.model.js";
 
 
 const authMiddleware = asyncHandler(async(req, res, next)=>{
@@ -13,6 +14,12 @@ const authMiddleware = asyncHandler(async(req, res, next)=>{
        .json(new ApiResponse
             ( 401,"Unauthoized access, token is missing !" )
         )
+    }
+    const isBlackListed= await TokenBlackListModel.findOne({token})
+    if(isBlackListed){
+        return res.status(401).json({
+            messages:"Unauthorized access , token is invaild"
+        })
     }
 
 
@@ -38,6 +45,14 @@ const authSystemMiddleware=asyncHandler(async(req, res, next)=>{
             ( 401,"Unauthoized access, token is missing !" )
         )
     }
+
+    const isBlackListed= await TokenBlackListModel.findOne({token})
+    if(isBlackListed){
+        return res.status(401).json({
+            messages:"Unauthorized access , token is invaild"
+        })
+    }
+
      try {
         const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY)
         const user = await UserModel.findById(decoded.userId).select("+systemUser")

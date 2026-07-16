@@ -4,7 +4,7 @@ import ApiError from "../utils/api_error.js";
 import ApiResponse from "../utils/api_response.js";
 import jwt from "jsonwebtoken";
 import {sendRegistrationEmail} from "../services/email.service.js";
-
+import { TokenBlackListModel } from "../models/blacklist.model.js";
 
 const userRegister = asyncHandler(async(req, res)=>{
     
@@ -113,5 +113,28 @@ const userlogin = asyncHandler(async(req,res)=>{
     
 })
 
+const userLogout= asyncHandler(async(req, res)=> {
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[ 1 ]
 
-export {userRegister, userlogin};
+    if (!token) {
+        return res.status(200).json({
+            message: "User logged out successfully"
+        })
+    }
+
+
+
+    await TokenBlackListModel.create({
+        token: token
+    })
+
+    res.clearCookie("token")
+
+    res.status(200).json({
+        message: "User logged out successfully"
+    })
+
+});
+
+
+export {userRegister, userlogin,userLogout};

@@ -83,7 +83,7 @@ const createTransaction = asyncHandler(async(req, res)=>{
             ))
         }
         if(isTransactionAlreadyExists.status === "REVERSED"){
-            return res.status
+            return res.status(505)
             .json(new ApiResponse(505,
                 "transaction was reversed ,please try again!",
             ))

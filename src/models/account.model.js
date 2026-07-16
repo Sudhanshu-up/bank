@@ -1,5 +1,4 @@
 import mongoose from "mongoose"
-import asyncHandler from "../utils/async_handler.js";
 import { LedgerModel } from "./ledger.model.js";
 
 const userAccountSchema = new mongoose.Schema({
@@ -27,7 +26,7 @@ const userAccountSchema = new mongoose.Schema({
 
 userAccountSchema.index({user:1, status:1}); //compound index
 
-userAccountSchema.methods.getBalance = asyncHandler(async function(){
+userAccountSchema.methods.getBalance = async function(){
 
     const balanceData = await LedgerModel.aggregate([
         {$match: {account : this._id}},
@@ -66,6 +65,6 @@ userAccountSchema.methods.getBalance = asyncHandler(async function(){
     }
     return balanceData[0].balance
 
-}) 
+}
 
 export const AccountModel = mongoose.model("AccountModel",userAccountSchema);

@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import asyncHandler from "../utils/async_handler.js";
 import nodemailer from "nodemailer";
  dotenv.config();
    
@@ -48,17 +47,17 @@ const sendEmail = async (to, subject, text, html) => {
 
 
 
-const sendRegistrationEmail = asyncHandler(async (userEmail,name) => {
+const sendRegistrationEmail = async (userEmail,name) => {
     const subject = "Welcome to Bankmangement!";
     const text = `Hello ${name},\n\n Thank you for registering at BankMangement`
     const html = `<p>Hello ${name},</P> <p>Thank you for registering at Bankmangement`
    
     await sendEmail(userEmail, subject, text, html)
     console.log("Recipient:", userEmail);
-});
+};
 
 
-const sendTransactionSuccessEmail = asyncHandler(async(userEmail, name, amount, toAccount)=> {
+const sendTransactionSuccessEmail = async (userEmail, name, amount, toAccount) => {
   const subject = "Transaction Successful!";
 
   const text = `
@@ -107,10 +106,10 @@ Your Bank Team
   `;
 
   await sendEmail(userEmail, subject, text, html);
-});
+};
 
 
-const sendTransactionFailureEmail = asyncHandler(async(userEmail, name, amount, toAccount)=>{
+const sendTransactionFailureEmail = async (userEmail, name, amount, toAccount) => {
   const subject = "Transaction Failed";
 
   const text = `
@@ -161,7 +160,7 @@ Your Bank Team
   `;
 
   await sendEmail(userEmail, subject, text, html);
-});
+};
 
 
 export {sendRegistrationEmail,

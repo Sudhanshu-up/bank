@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 // import ApiResponse from "./utils/api_response.js"
 import ApiError from "./utils/api_error.js"
-// import errorHandler from "./middlewares/error.middleware.js"
+import errorHandler from "./middlewares/error.middleware.js"
 import authRouter from "./routes/auth.route.js"
 import cookieParser from "cookie-parser"
 import accountRouter from "./routes/account.route.js"
@@ -28,6 +28,6 @@ app.use((req,res,next)=>{
 });
 
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export default app;
